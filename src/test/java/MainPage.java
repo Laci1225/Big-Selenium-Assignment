@@ -1,5 +1,4 @@
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class MainPage extends PageBase {
 
@@ -8,15 +7,13 @@ public class MainPage extends PageBase {
         this.driver.get("https://budapest.craigslist.org/");
     }
 
-    public LoginPage pushProfileIconButtonToLogIn(By icon) {
-        WebElement mobileMenuButton = wait.until(ExpectedConditions.elementToBeClickable(icon));
-        mobileMenuButton.click();
+    public LoginPage pushProfileIconButtonToLogIn() {
+        waitAndClick(Locators.PROFILE_ICON);
         return new LoginPage(driver);
     }
 
-    public ProfilePage pushProfileIconButtonToViewProfile(By icon) {
-        WebElement mobileMenuButton = wait.until(ExpectedConditions.elementToBeClickable(icon));
-        mobileMenuButton.click();
+    public ProfilePage pushProfileIconButtonToViewProfile() {
+        waitAndClick(Locators.PROFILE_ICON);
         return new ProfilePage(driver);
     }
 }

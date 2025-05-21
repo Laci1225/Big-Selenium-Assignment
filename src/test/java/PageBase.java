@@ -5,10 +5,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PageBase {
 
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected final WebDriver driver;
+    protected final WebDriverWait wait;
 
-    private static final By BACK_TO_MAIN_PAGE_BUTTON = By.xpath("//a[@href='https://www.craigslist.org']");
 
     public PageBase(WebDriver driver){
         this.driver = driver;
@@ -18,6 +17,21 @@ public class PageBase {
     protected WebElement waitAndReturnElement(By locator){
         this.wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         return driver.findElement(locator);
+    }
+
+    protected void waitAndClick(By locator) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        element.click();
+    }
+
+    protected void waitAndFill(By locator, String text) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        element.sendKeys(text);
+    }
+
+    protected void waitAndUpload(By locator, String text) {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        element.sendKeys(text);
     }
 
     public String getElementText(By locator) {
@@ -30,8 +44,7 @@ public class PageBase {
     }
 
     public void backToMainPage() {
-        WebElement backToMainPageButton = wait.until(ExpectedConditions.elementToBeClickable(BACK_TO_MAIN_PAGE_BUTTON));
-        backToMainPageButton.click();
+        waitAndClick(Locators.BACK_TO_MAIN_PAGE_BUTTON);
     }
 
     public void assertElementTextContains(By locator, String expectedText) {
