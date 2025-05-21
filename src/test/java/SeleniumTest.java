@@ -12,19 +12,36 @@ public class SeleniumTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
+    private MainPage mainPage;
 
     @Before
-    public void SetUp() throws MalformedURLException{
+    public void setUp() throws MalformedURLException{
         ChromeOptions options = new ChromeOptions();
         this.driver = new RemoteWebDriver(new URL("http://selenium:4444/wd/hub"), options);
         this.driver.manage().window().maximize();
         this.wait = new WebDriverWait(this.driver, 10);
+        this.mainPage = new MainPage(this.driver);
+        LoginPage loginPage = new LoginPage(this.driver);
+        mainPage.pushProfileIconButton();
+        mainPage.waitAndReturnElement(By.xpath("//input[@id='inputEmailHandle']"));
+        loginPage.pushSubmitLoginButton();
+        loginPage.waitAndReturnElement(By.xpath("//a[contains(@href, 'logout')]"));
+        loginPage.backToMainPage();
+        loginPage.waitAndReturnElement(By.xpath("//div[@id='actionIconsGoHere']" +
+                "//a[contains(@href, 'https://accounts.craigslist.org/login/home')]"));
     }
 
     @Test
-    public void testSelenium(){
-        MainPage mainPage = new MainPage(this.driver);
-        mainPage.pushLoginButton();
+    public void testReadTitle() {
+        String title = mainPage.getTitle();
+        Assert.assertTrue(title.toLowerCase().contains("craigslist"));
+        mainPage.assertElementVisible(By.xpath("//a[contains(@class, 'cl-location-picker-link')]"));
+        mainPage.assertElementTextContains(By.xpath("//a[contains(@class, 'cl-location-picker-link')]"), "budapest");
+    }
+
+    @Test
+    public void testSelenium() {
+        mainPage.pushProfileIconButton();
         mainPage.waitAndReturnElement(
                 By.xpath("//input[@id='inputEmailHandle']")
         );
@@ -34,52 +51,69 @@ public class SeleniumTest {
         loginPage.waitAndReturnElement(
                 By.xpath("//a[contains(@href, 'logout')]")
         );
-        /*WebElement logOutButton = this.driver.findElement(
-                By.xpath("//a[contains(@href, 'logout')]")
-        );
-        logOutButton.click();
-        this.wait.until(ExpectedConditions.visibilityOfElementLocated(
+    }
+
+    @Test
+    public void testLogout() {
+        mainPage.pushProfileIconButton();
+        WebElement logoutButton = driver.findElement(By.xpath("//a[contains(@href, 'logout')]"));
+        logoutButton.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//input[@id='inputEmailHandle']")
         ));
-        LoginPage loginPage1 = new LoginPage(this.driver);
-        loginPage1.pushSubmitLoginButton();*/
+    }
 
-        CreateCommunityPost createCommunityPost = new CreateCommunityPost(this.driver);
-        createCommunityPost.makeANewPost();
+    @Test
+    public void testBrowserBackNavigation() {
+        mainPage.pushProfileIconButton();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href, 'logout')]")));
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//form[contains(@class, 'picker')]")
-        ));
-        createCommunityPost.selectCommunity("community");
+        driver.navigate().back();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//form[contains(@class, 'picker')]")
-        ));
-        createCommunityPost.selectCategory("groups");
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.id("postingForm")
-        ));
-        createCommunityPost.fillPostDetails(
-                "Free kittens",
-                "We have 4 kittens looking for a family."
-        );
-        createCommunityPost.clickContinueButton();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//div[contains(@id, 'uploader')]")
-        ));
-        createCommunityPost.uploadImage();
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//figure[contains(@class, 'imgbox')]")
-        ));
-        createCommunityPost.clickDoneWithImage();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//h1[contains(@class, 'preview-notification')]")
+        WebElement mainIcon = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@id='actionIconsGoHere']")
         ));
 
-        createCommunityPost.clickBackToMainPage();
+        Assert.assertTrue(mainIcon.isDisplayed());
+    }
+
+    @Test
+    public void testJavascriptExecutorScrollAndHighlight() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        Thread.sleep(2000);
+        js.executeScript("window.scrollTo(document.body.scrollHeight, 0);");
+        WebElement locationPicker = driver.findElement(By.xpath("//a[contains(@class, 'cl-location-picker-link')]"));
+        js.executeScript("arguments[0].style.border='3px solid red'", locationPicker);
+
+        Assert.assertTrue(locationPicker.isDisplayed());
+    }
+
+    @Test
+    public void testCreatePostAndReturnToMain() {
+        mainPage.pushProfileIconButton();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href, 'logout')]")));
+
+        CreatePost createPost = new CreatePost(this.driver);
+        createPost.makeANewPost();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//form[contains(@class, 'picker')]")));
+        createPost.selectCommunity("community");
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//form[contains(@class, 'picker')]")));
+        createPost.selectCategory("groups");
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("postingForm")));
+        createPost.fillPostDetails("Free kittens", "We have 4 kittens looking for a family.");
+        createPost.clickContinueButton();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@id, 'uploader')]")));
+        createPost.uploadImage();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//figure[contains(@class, 'imgbox')]")));
+        createPost.clickDoneWithImage();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(@class, 'preview-notification')]")));
+        createPost.backToMainPage();
     }
 /*
     @After

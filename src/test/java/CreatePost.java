@@ -3,9 +3,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class CreateCommunityPost extends PageBase {
+public class CreatePost extends PageBase {
 
-    public CreateCommunityPost(WebDriver driver) {
+    public CreatePost(WebDriver driver) {
         super(driver);
     }
 
@@ -61,12 +61,5 @@ public class CreateCommunityPost extends PageBase {
                 By.xpath("//button[@type='submit' and @name='go' and @class='done']")
         ));
         continueButton.click();
-    }
-
-    public void clickBackToMainPage() {
-        WebElement backToMainPageButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@class='header-logo' and @name='logoLink']")
-        ));
-        backToMainPageButton.click();
     }
 }
