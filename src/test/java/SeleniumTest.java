@@ -5,6 +5,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 public class SeleniumTest {
 
@@ -15,6 +16,8 @@ public class SeleniumTest {
     @Before
     public void setUp() throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-infobars");
+        options.addArguments("--disable-extensions");
         this.driver = new RemoteWebDriver(new URL("http://selenium:4444/wd/hub"), options);
         this.driver.manage().window().maximize();
         this.mainPage = new MainPage(this.driver);
@@ -43,10 +46,15 @@ public class SeleniumTest {
     }
 
     @Test
+    public void testStaticPages() throws Exception {
+        new StaticPage(driver).testAllStaticPages();
+    }
+
+    @Test
     public void testBrowserBackNavigationAfterViewingProfile() {
         ProfilePage profilePage = mainPage.pushProfileIconButtonToViewProfile();
         profilePage.assertElementVisible(Locators.LOGOUT_LINK);
-        profilePage.driver.navigate().back();
+        profilePage.navigateBack();
         mainPage.assertElementVisible(Locators.PROFILE_ICON);
     }
 
@@ -65,7 +73,7 @@ public class SeleniumTest {
 
     @Test
     public void testCreatePostAndReturnToMain() {
-        ProfilePage profilePage =  mainPage.pushProfileIconButtonToViewProfile();
+        ProfilePage profilePage = mainPage.pushProfileIconButtonToViewProfile();
         profilePage.assertElementVisible(Locators.LOGOUT_LINK);
 
         CreatePost createPost = profilePage.makeANewPost();
@@ -93,12 +101,12 @@ public class SeleniumTest {
         */
     }
 
-
+/*
     @After
     public void close() {
         if (driver != null) {
             driver.quit();
         }
-    }
+    }*/
 
 }

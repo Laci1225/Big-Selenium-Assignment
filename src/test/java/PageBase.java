@@ -5,9 +5,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PageBase {
 
-    protected final WebDriver driver;
-    protected final WebDriverWait wait;
-
+    protected WebDriver driver;
+    protected WebDriverWait wait;
 
     public PageBase(WebDriver driver){
         this.driver = driver;
@@ -55,5 +54,9 @@ public class PageBase {
     public void assertElementVisible(By locator) {
         WebElement element = waitAndReturnElement(locator);
         Assert.assertTrue(element.isDisplayed());
+    }
+
+    public void navigateBack() {
+        driver.navigate().back();
     }
 }
