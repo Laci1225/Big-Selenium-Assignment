@@ -3,9 +3,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import io.github.cdimascio.dotenv.Dotenv;
 
-
 public class LoginPage extends PageBase {
+
     private static final Dotenv dotenv = Dotenv.load();
+
+    private static final By USERNAME_INPUT = By.xpath("//input[@id='inputEmailHandle']");
+    private static final By PASSWORD_INPUT = By.xpath("//input[@type='password' and @id='inputPassword']");
+    private static final By SUBMIT_LOGIN_BUTTON = By.xpath("//button[@id='login' and @type='submit']");
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -19,18 +23,13 @@ public class LoginPage extends PageBase {
             throw new RuntimeException("Environment variables for login credentials not set.");
         }
 
-        WebElement username = this.driver.findElement(
-                By.xpath("//input[@id='inputEmailHandle']")
-        );
+        WebElement username = driver.findElement(USERNAME_INPUT);
         username.sendKeys(usernameEnv);
-        WebElement password = this.driver.findElement(
-                By.xpath("//input[@type='password' and @id='inputPassword']")
-        );
+
+        WebElement password = driver.findElement(PASSWORD_INPUT);
         password.sendKeys(passwordEnv);
 
-        WebElement submitLoginButton = this.driver.findElement(
-                By.xpath("//button[@id='login' and @type='submit']")
-        );
+        WebElement submitLoginButton = driver.findElement(SUBMIT_LOGIN_BUTTON);
         submitLoginButton.click();
     }
 }

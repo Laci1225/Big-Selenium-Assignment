@@ -8,6 +8,8 @@ public class PageBase {
     protected WebDriver driver;
     protected WebDriverWait wait;
 
+    private static final By BACK_TO_MAIN_PAGE_BUTTON = By.xpath("//a[@href='https://www.craigslist.org']");
+
     public PageBase(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, 10);
@@ -28,25 +30,17 @@ public class PageBase {
     }
 
     public void backToMainPage() {
-        WebElement backToMainPageButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[@href='https://www.craigslist.org']")
-        ));
+        WebElement backToMainPageButton = wait.until(ExpectedConditions.elementToBeClickable(BACK_TO_MAIN_PAGE_BUTTON));
         backToMainPageButton.click();
     }
 
     public void assertElementTextContains(By locator, String expectedText) {
         String actualText = getElementText(locator);
-        Assert.assertTrue(
-                "Expected text to contain: " + expectedText + ", but got: " + actualText,
-                actualText.contains(expectedText)
-        );
+        Assert.assertTrue(actualText.contains(expectedText));
     }
 
     public void assertElementVisible(By locator) {
         WebElement element = waitAndReturnElement(locator);
-        Assert.assertTrue(
-                "Expected element to be displayed: " + locator.toString(),
-                element.isDisplayed())
-        ;
+        Assert.assertTrue(element.isDisplayed());
     }
 }

@@ -8,11 +8,8 @@ public class MainPage extends PageBase {
         this.driver.get("https://budapest.craigslist.org/");
     }
 
-    public void pushProfileIconButton() {
-        WebElement mobileMenuButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@id='actionIconsGoHere']" +
-                        "//a[contains(@href, 'https://accounts.craigslist.org/login/home')]")
-        ));
+    public void pushProfileIconButton(By icon) {
+        WebElement mobileMenuButton = wait.until(ExpectedConditions.elementToBeClickable(icon));
         mobileMenuButton.click();
     }
 }
