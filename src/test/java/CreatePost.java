@@ -5,7 +5,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CreatePost extends PageBase {
 
-    private static final By MAKE_NEW_POST = By.xpath("//div[@id='account-homepage']//a[contains(text(), 'make new post') or contains(@href, 'https://post.craigslist.org/c/')]");
     private static final String COMMUNITY_RADIO_TEMPLATE = "//label[contains(., '%s')]/input[@type='radio']";
     private static final String CATEGORY_RADIO_TEMPLATE = "//span[@class='option-label' and contains(text(), '%s')]/ancestor::label[@class='radio-option']/input";
     private static final By POST_TITLE_INPUT = By.xpath("//input[@id='PostingTitle']");
@@ -16,11 +15,6 @@ public class CreatePost extends PageBase {
 
     public CreatePost(WebDriver driver) {
         super(driver);
-    }
-
-    public void makeANewPost() {
-        WebElement createPostButton = wait.until(ExpectedConditions.elementToBeClickable(MAKE_NEW_POST));
-        createPostButton.click();
     }
 
     public void selectCommunity(String type) {
