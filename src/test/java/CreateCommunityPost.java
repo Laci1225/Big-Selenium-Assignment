@@ -18,8 +18,43 @@ public class CreateCommunityPost extends PageBase {
 
     public void selectCommunity(String type) {
         WebElement selectRadio = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//label[contains(text(), '"+type+"')]/input[@type='radio']")
+                By.xpath("//label[contains(., '"+type+"')]/input[@type='radio']")
         ));
         selectRadio.click();
     }
+
+    public void selectCategory(String name) {
+        WebElement selectRadio = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//span[@class='option-label' and contains(text(), '" + name + "')]/ancestor::label[@class='radio-option']/input")
+        ));
+        selectRadio.click();
+    }
+
+    public void fillPostDetails(String name, String description) {
+        WebElement titleInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@id='PostingTitle']")
+        ));
+        titleInput.sendKeys(name);
+
+        WebElement descriptionTextarea = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//textarea[@id='PostingBody']")
+        ));
+        descriptionTextarea.sendKeys(description);
+    }
+
+    public void clickContinueButton() {
+        WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@type='submit' and @name='go' and @value='continue']")
+        ));
+        continueButton.click();
+    }
+
+    public void uploadImage() {
+        WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//input[@type='file' and @multiple]")
+        ));
+        fileInput.sendKeys("/opt/google/chrome/product_logo_256.png");
+
+    }
+
 }

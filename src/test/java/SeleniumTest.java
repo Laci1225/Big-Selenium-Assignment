@@ -34,7 +34,7 @@ public class SeleniumTest {
         loginPage.waitAndReturnElement(
                 By.xpath("//a[contains(@href, 'logout')]")
         );
-        WebElement logOutButton = this.driver.findElement(
+        /*WebElement logOutButton = this.driver.findElement(
                 By.xpath("//a[contains(@href, 'logout')]")
         );
         logOutButton.click();
@@ -42,15 +42,34 @@ public class SeleniumTest {
                 By.xpath("//input[@id='inputEmailHandle']")
         ));
         LoginPage loginPage1 = new LoginPage(this.driver);
-        loginPage1.pushSubmitLoginButton();
+        loginPage1.pushSubmitLoginButton();*/
 
         CreateCommunityPost createCommunityPost = new CreateCommunityPost(this.driver);
         createCommunityPost.makeANewPost();
-        /*
-        createCommunityPost.waitAndReturnElement(
-                By.xpath("//label[contains(text(), '"+type+"')]/input[@type='radio']")
-        createCommunityPost.selectCommunity("community");*/
 
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//form[contains(@class, 'picker')]")
+        ));
+        createCommunityPost.selectCommunity("community");
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//form[contains(@class, 'picker')]")
+        ));
+        createCommunityPost.selectCategory("groups");
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("postingForm")
+        ));
+        createCommunityPost.fillPostDetails(
+                "Free kittens",
+                "We have 4 kittens looking for a family."
+        );
+        createCommunityPost.clickContinueButton();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[contains(@id, 'uploader')]")
+        ));
+        createCommunityPost.uploadImage();
     }
 /*
     @After
