@@ -54,7 +54,19 @@ public class CreateCommunityPost extends PageBase {
                 By.xpath("//input[@type='file' and @multiple]")
         ));
         fileInput.sendKeys("/opt/google/chrome/product_logo_256.png");
-
     }
 
+    public void clickDoneWithImage() {
+        WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@type='submit' and @name='go' and @class='done']")
+        ));
+        continueButton.click();
+    }
+
+    public void clickBackToMainPage() {
+        WebElement backToMainPageButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@class='header-logo' and @name='logoLink']")
+        ));
+        backToMainPageButton.click();
+    }
 }

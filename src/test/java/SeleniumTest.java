@@ -70,6 +70,16 @@ public class SeleniumTest {
                 By.xpath("//div[contains(@id, 'uploader')]")
         ));
         createCommunityPost.uploadImage();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//figure[contains(@class, 'imgbox')]")
+        ));
+        createCommunityPost.clickDoneWithImage();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//h1[contains(@class, 'preview-notification')]")
+        ));
+
+        createCommunityPost.clickBackToMainPage();
     }
 /*
     @After
