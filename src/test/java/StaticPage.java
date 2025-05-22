@@ -1,9 +1,7 @@
 import org.junit.Test;
 import org.openqa.selenium.By;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openqa.selenium.WebDriver;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 

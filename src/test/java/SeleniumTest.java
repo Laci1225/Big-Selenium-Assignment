@@ -5,7 +5,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 
 public class SeleniumTest {
 
@@ -101,12 +100,12 @@ public class SeleniumTest {
         */
     }
 
-/*
+
     @After
     public void close() {
         if (driver != null) {
             driver.quit();
         }
-    }*/
+    }
 
 }
