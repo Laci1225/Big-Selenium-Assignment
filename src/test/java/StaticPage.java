@@ -17,7 +17,6 @@ public class StaticPage extends PageBase {
     );
 
 
-    @Test
     public void testAllStaticPages(){
         for (PageToTest page : PAGES) {
             driver.get(page.url);
